@@ -4,8 +4,6 @@ const cors = require('cors');
 var bodyParser = require('body-parser')
 const app = express();
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
@@ -25,7 +23,7 @@ app.get('/api/hello', function(req, res) {
 
 
 // Your first API endpoint
-app.post('/api/shorturl', function(req, res) {
+app.post('/api/shorturl', bodyParser.urlencoded({ extended: false }),function(req, res) {
     const originalUrl =req.body.url;
   try{
     if(!originalUrl.includes("http://")){
@@ -37,7 +35,6 @@ app.post('/api/shorturl', function(req, res) {
     return;
   }
   res.json({ original_url:originalUrl, short_url : btoa(originalUrl)});
-  throw JSON.stringify({ original_url:originalUrl, short_url : btoa(originalUrl)})
 });
 
 
