@@ -1,12 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 const app = express();
 
-
-// Basic Configuration
-const port = process.env.PORT || 3000;
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(cors());
 
@@ -23,10 +21,10 @@ app.get('/api/hello', function(req, res) {
 
 
 // Your first API endpoint
-app.post('/api/shorturl', bodyParser.urlencoded({ extended: false }),function(req, res) {
+app.post('/api/shorturl',function(req, res) {
     const originalUrl =req.body.url;
   try{
-    if(!originalUrl.includes("http://")){
+    if(originalUrl && !originalUrl.includes("https://")){
       res.json({ error: 'invalid url' })
       return;
     }
@@ -40,7 +38,7 @@ app.post('/api/shorturl', bodyParser.urlencoded({ extended: false }),function(re
 
 // Your first API endpoint
 app.get('/api/shorturl/:shortId', function(req, res) {
-  const originalUrl = atob(req.params.shortId);
+  const originalUrl = atob(req.params.shortId)
   res.redirect(originalUrl)
 });
 
